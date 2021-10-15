@@ -29,7 +29,7 @@ function App() {
     getContactName()
   }, [person])
   return (
-    <Frame ref={iframeRef} url={`${url}/?contact=`} />
+    <Frame containerStyle={{ maxWidth: '425px' }} ref={iframeRef} url={`${url}/?contact=`} />
   )
 }
 

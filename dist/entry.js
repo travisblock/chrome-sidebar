@@ -6998,7 +6998,7 @@ function App() {
 
     getContactName();
   }, [person]);
-  return _react2.default.createElement(_chromeSidebar.Frame, { ref: iframeRef, url: _settings.url + '/?contact=' });
+  return _react2.default.createElement(_chromeSidebar.Frame, { containerStyle: { maxWidth: '425px' }, ref: iframeRef, url: _settings.url + '/?contact=' });
 }
 
 function boot() {
