@@ -6904,23 +6904,28 @@ console.log('Chrome Sidebar Extension Registered');
 
 chrome.browserAction.onClicked.addListener(function (tab) {
   console.log('Browser Action Triggered');
-  chrome.storage.sync.get(['key'], function (result) {
-    console.log('URL currently is ' + result.key);
-  });
-  // for the current tab, inject the "inject.js" file & execute it
   chrome.tabs.executeScript(tab.id, {
     file: 'entry.js'
   });
 });
 
-(0, _chromeSidebar.attachHeadersListener)({
-  webRequest: chrome.webRequest,
-  hosts: _settings.hosts,
-  iframeHosts: _settings.iframeHosts,
-  overrideFrameOptions: true
-});
-chrome.storage.sync.get(['key'], function (result) {
-  console.log('Value currently is ' + result.key);
+var xhost, xiframeHost;
+chrome.storage.sync.get({ baseUrl: '' }, function (items) {
+  try {
+    var uri = new URL(items.baseUrl);
+    xhost = uri.hostname ? uri.hostname : _settings.hosts;
+    xiframeHost = uri.origin ? uri.origin : _settings.iframeHosts;
+  } catch (e) {
+    xhost = _settings.hosts;
+    xiframeHost = _settings.iframeHosts;
+  }
+
+  (0, _chromeSidebar.attachHeadersListener)({
+    webRequest: chrome.webRequest,
+    hosts: xhost,
+    iframeHosts: xiframeHost,
+    overrideFrameOptions: true
+  });
 });
 
 /***/ })
