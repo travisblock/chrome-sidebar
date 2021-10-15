@@ -18,6 +18,8 @@
     "http://*/*",
     "tabs",
     "webRequest",
-    "webRequestBlocking"
-  ]
+    "webRequestBlocking",
+    "storage"
+  ],
+  "options_page": "options.html"
 }
