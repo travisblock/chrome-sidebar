@@ -6900,10 +6900,13 @@ var _chromeSidebar = __webpack_require__(16);
 
 var _settings = __webpack_require__(15);
 
-console.log('Chrome Github Trending Sidebar Extension Registered');
+console.log('Chrome Sidebar Extension Registered');
 
 chrome.browserAction.onClicked.addListener(function (tab) {
   console.log('Browser Action Triggered');
+  chrome.storage.sync.get(['key'], function (result) {
+    console.log('URL currently is ' + result.key);
+  });
   // for the current tab, inject the "inject.js" file & execute it
   chrome.tabs.executeScript(tab.id, {
     file: 'entry.js'
@@ -6915,6 +6918,9 @@ chrome.browserAction.onClicked.addListener(function (tab) {
   hosts: _settings.hosts,
   iframeHosts: _settings.iframeHosts,
   overrideFrameOptions: true
+});
+chrome.storage.sync.get(['key'], function (result) {
+  console.log('Value currently is ' + result.key);
 });
 
 /***/ })
