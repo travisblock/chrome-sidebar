@@ -11,7 +11,14 @@ if (Frame.isReady()) {
 
 
 function App() {
-  const [person, setPerson] = useState('')
+  const [person, setPerson] = useState('');
+  const [xhost, setXhost] = useState(() => {
+    chrome.storage.sync.get({baseUrl: ''}, (items) => items.baseUrl);
+  });
+  const [param, setParam] = useState(() => {
+    chrome.storage.sync.get({paramName: 'name'}, (items) => items.paramName);
+  });
+
   const iframeRef = useRef(null);
   useEffect(() => {
 
@@ -23,13 +30,18 @@ function App() {
         })
       })
 
-      iframeRef.current.props.url = `${url}/?contact=${person}`
+      iframeRef.current.props.url = `${xhost}/?${param}=${person}`
     }
 
+    chrome.storage.sync.get({baseUrl: '', paramName: 'name'}, (items) => {
+      setXhost(items.baseUrl);
+      setParam(items.paramName);
+    });
+    
     getContactName()
   }, [person])
   return (
-    <Frame containerStyle={{ maxWidth: '425px' }} ref={iframeRef} url={`${url}/?contact=`} />
+    <Frame containerStyle={{ maxWidth: '425px' }} ref={iframeRef} url={`${xhost}/?${param}=`} />
   )
 }
 

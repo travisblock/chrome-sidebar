@@ -6982,6 +6982,24 @@ function App() {
       person = _useState2[0],
       setPerson = _useState2[1];
 
+  var _useState3 = (0, _react.useState)(function () {
+    chrome.storage.sync.get({ baseUrl: '' }, function (items) {
+      return items.baseUrl;
+    });
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      xhost = _useState4[0],
+      setXhost = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(function () {
+    chrome.storage.sync.get({ paramName: 'name' }, function (items) {
+      return items.paramName;
+    });
+  }),
+      _useState6 = _slicedToArray(_useState5, 2),
+      param = _useState6[0],
+      setParam = _useState6[1];
+
   var iframeRef = (0, _react.useRef)(null);
   (0, _react.useEffect)(function () {
 
@@ -6993,12 +7011,17 @@ function App() {
         });
       });
 
-      iframeRef.current.props.url = _settings.url + '/?contact=' + person;
+      iframeRef.current.props.url = xhost + '/?' + param + '=' + person;
     }
+
+    chrome.storage.sync.get({ baseUrl: '', paramName: 'name' }, function (items) {
+      setXhost(items.baseUrl);
+      setParam(items.paramName);
+    });
 
     getContactName();
   }, [person]);
-  return _react2.default.createElement(_chromeSidebar.Frame, { containerStyle: { maxWidth: '425px' }, ref: iframeRef, url: _settings.url + '/?contact=' });
+  return _react2.default.createElement(_chromeSidebar.Frame, { containerStyle: { maxWidth: '425px' }, ref: iframeRef, url: xhost + '/?' + param + '=' });
 }
 
 function boot() {
