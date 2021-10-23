@@ -84,53 +84,48 @@ chrome.browserAction.onClicked.addListener(function (tab) {
 var host, iframehost;
 var overrideFrameOptions = true;
 
-chrome.storage.sync.set({
-  baseUrl: 'https://7he61.csb.app',
-  paramName: 'contact'
-}, function () {
-  chrome.storage.sync.get({ baseUrl: '' }, function (items) {
-    try {
-      var uri = new URL(items.baseUrl);
-      host = uri.hostname ? uri.hostname : '*';
-      iframehost = uri.origin ? '' + uri.origin : 'https://*/*';
-    } catch (e) {
-      host = '*';
-      iframehost = 'https://*/*';
-    }
+chrome.storage.sync.get({ baseUrl: 'https://7he61.csb.app', paramName: 'contact' }, function (items) {
+  try {
+    var uri = new URL(items.baseUrl);
+    host = uri.hostname ? uri.hostname : '*';
+    iframehost = uri.origin ? '' + uri.origin : 'https://*/*';
+  } catch (e) {
+    host = '*';
+    iframehost = 'https://*/*';
+  }
 
-    chrome.webRequest.onHeadersReceived.addListener(function (details) {
-      var responseHeaders = details.responseHeaders.map(function (header) {
-        var isCSPHeader = /content-security-policy/i.test(header.name);
-        var isFrameHeader = /x-frame-options/i.test(header.name);
+  chrome.webRequest.onHeadersReceived.addListener(function (details) {
+    var responseHeaders = details.responseHeaders.map(function (header) {
+      var isCSPHeader = /content-security-policy/i.test(header.name);
+      var isFrameHeader = /x-frame-options/i.test(header.name);
 
-        if (isCSPHeader) {
-          var csp = header.value;
+      if (isCSPHeader) {
+        var csp = header.value;
 
-          console.log('HOST: ' + host, 'IFRAME: ' + iframehost);
+        console.log('HOST: ' + host, 'IFRAME: ' + iframehost);
 
-          csp = csp.replace('script-src', 'script-src ' + host);
-          csp = csp.replace('style-src', 'style-src ' + host);
-          csp = csp.replace('frame-src', 'frame-src ' + iframehost);
-          csp = csp.replace('child-src', 'child-src ' + host);
+        csp = csp.replace('script-src', 'script-src ' + host);
+        csp = csp.replace('style-src', 'style-src ' + host);
+        csp = csp.replace('frame-src', 'frame-src ' + iframehost);
+        csp = csp.replace('child-src', 'child-src ' + host);
 
-          if (overrideFrameOptions) {
-            csp = csp.replace(/frame-ancestors (.*?);/ig, '');
-          }
-
-          header.value = csp;
-        } else if (isFrameHeader && overrideFrameOptions) {
-          header.value = 'ALLOWALL';
+        if (overrideFrameOptions) {
+          csp = csp.replace(/frame-ancestors (.*?);/ig, '');
         }
 
-        return header;
-      });
+        header.value = csp;
+      } else if (isFrameHeader && overrideFrameOptions) {
+        header.value = 'ALLOWALL';
+      }
 
-      return { responseHeaders: responseHeaders };
-    }, {
-      urls: ['http://*/*', 'https://*/*'],
-      types: ['main_frame', 'sub_frame']
-    }, ['blocking', 'responseHeaders']);
-  });
+      return header;
+    });
+
+    return { responseHeaders: responseHeaders };
+  }, {
+    urls: ['http://*/*', 'https://*/*'],
+    types: ['main_frame', 'sub_frame']
+  }, ['blocking', 'responseHeaders']);
 });
 
 /***/ })
