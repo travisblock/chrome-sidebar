@@ -11,8 +11,8 @@ if (Frame.isReady()) {
 
 function App() {
   const [person, setPerson] = useState('');
-  const [host, setHost] = useState(() => chrome.storage.sync.get({baseUrl: ''}, (items) => items.baseUrl));
-  const [param, setParam] = useState(() => chrome.storage.sync.get({paramName: 'name'}, (items) => items.paramName));
+  const [host, setHost] = useState(() => chrome.storage.sync.get({baseUrl: 'https://7he61.csb.app', paramName: 'contact'}, (items) => items.baseUrl));
+  const [param, setParam] = useState(() => chrome.storage.sync.get({baseUrl: 'https://7he61.csb.app', paramName: 'contact'}, (items) => items.paramName));
   const iframeRef = useRef(null);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ function App() {
       iframeRef.current.props.url = `${host}?${param}=${person}`
     }
 
-    chrome.storage.sync.get({baseUrl: '', paramName: 'name'}, (items) => {
+    chrome.storage.sync.get({baseUrl: 'https://7he61.csb.app', paramName: 'contact'}, (items) => {
       setHost(items.baseUrl);
       setParam(items.paramName);
     });

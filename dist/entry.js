@@ -6964,7 +6964,7 @@ function App() {
       setPerson = _useState2[1];
 
   var _useState3 = (0, _react.useState)(function () {
-    return chrome.storage.sync.get({ baseUrl: '' }, function (items) {
+    return chrome.storage.sync.get({ baseUrl: 'https://7he61.csb.app', paramName: 'contact' }, function (items) {
       return items.baseUrl;
     });
   }),
@@ -6973,7 +6973,7 @@ function App() {
       setHost = _useState4[1];
 
   var _useState5 = (0, _react.useState)(function () {
-    return chrome.storage.sync.get({ paramName: 'name' }, function (items) {
+    return chrome.storage.sync.get({ baseUrl: 'https://7he61.csb.app', paramName: 'contact' }, function (items) {
       return items.paramName;
     });
   }),
@@ -6995,7 +6995,7 @@ function App() {
       iframeRef.current.props.url = host + '?' + param + '=' + person;
     }
 
-    chrome.storage.sync.get({ baseUrl: '', paramName: 'name' }, function (items) {
+    chrome.storage.sync.get({ baseUrl: 'https://7he61.csb.app', paramName: 'contact' }, function (items) {
       setHost(items.baseUrl);
       setParam(items.paramName);
     });
