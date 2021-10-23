@@ -1268,24 +1268,7 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var url = exports.url = 'https://7he61.csb.app';
-var hosts = exports.hosts = '7he61.csb.app';
-var iframeHosts = exports.iframeHosts = 'https://7he61.csb.app';
-
-exports.default = {
-  hosts: hosts, iframeHosts: iframeHosts, url: url
-};
-
-/***/ }),
+/* 15 */,
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6966,8 +6949,6 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 
 var _chromeSidebar = __webpack_require__(16);
 
-var _settings = __webpack_require__(15);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 if (_chromeSidebar.Frame.isReady()) {
@@ -6983,16 +6964,16 @@ function App() {
       setPerson = _useState2[1];
 
   var _useState3 = (0, _react.useState)(function () {
-    chrome.storage.sync.get({ baseUrl: '' }, function (items) {
+    return chrome.storage.sync.get({ baseUrl: '' }, function (items) {
       return items.baseUrl;
     });
   }),
       _useState4 = _slicedToArray(_useState3, 2),
-      xhost = _useState4[0],
-      setXhost = _useState4[1];
+      host = _useState4[0],
+      setHost = _useState4[1];
 
   var _useState5 = (0, _react.useState)(function () {
-    chrome.storage.sync.get({ paramName: 'name' }, function (items) {
+    return chrome.storage.sync.get({ paramName: 'name' }, function (items) {
       return items.paramName;
     });
   }),
@@ -7001,8 +6982,8 @@ function App() {
       setParam = _useState6[1];
 
   var iframeRef = (0, _react.useRef)(null);
-  (0, _react.useEffect)(function () {
 
+  (0, _react.useEffect)(function () {
     function getContactName() {
       document.querySelectorAll('#pane-side div._3uIPm.WYyr1 div').forEach(function (el) {
         el.addEventListener('click', function (e) {
@@ -7011,17 +6992,18 @@ function App() {
         });
       });
 
-      iframeRef.current.props.url = xhost + '/?' + param + '=' + person;
+      iframeRef.current.props.url = host + '?' + param + '=' + person;
     }
 
     chrome.storage.sync.get({ baseUrl: '', paramName: 'name' }, function (items) {
-      setXhost(items.baseUrl);
+      setHost(items.baseUrl);
       setParam(items.paramName);
     });
 
     getContactName();
   }, [person]);
-  return _react2.default.createElement(_chromeSidebar.Frame, { containerStyle: { maxWidth: '425px' }, ref: iframeRef, url: xhost + '/?' + param + '=' });
+
+  return _react2.default.createElement(_chromeSidebar.Frame, { containerStyle: { maxWidth: '425px' }, ref: iframeRef, url: host + '?' + param + '=' });
 }
 
 function boot() {

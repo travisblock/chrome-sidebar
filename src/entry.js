@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { Frame } from 'chrome-sidebar'
-import { url } from './settings'
 
 if (Frame.isReady()) {
   Frame.toggle();
@@ -12,16 +11,11 @@ if (Frame.isReady()) {
 
 function App() {
   const [person, setPerson] = useState('');
-  const [xhost, setXhost] = useState(() => {
-    chrome.storage.sync.get({baseUrl: ''}, (items) => items.baseUrl);
-  });
-  const [param, setParam] = useState(() => {
-    chrome.storage.sync.get({paramName: 'name'}, (items) => items.paramName);
-  });
-
+  const [host, setHost] = useState(() => chrome.storage.sync.get({baseUrl: ''}, (items) => items.baseUrl));
+  const [param, setParam] = useState(() => chrome.storage.sync.get({paramName: 'name'}, (items) => items.paramName));
   const iframeRef = useRef(null);
-  useEffect(() => {
 
+  useEffect(() => {
     function getContactName() {
       document.querySelectorAll('#pane-side div._3uIPm.WYyr1 div').forEach(function(el) {
         el.addEventListener('click', function(e) {
@@ -30,18 +24,19 @@ function App() {
         })
       })
 
-      iframeRef.current.props.url = `${xhost}/?${param}=${person}`
+      iframeRef.current.props.url = `${host}?${param}=${person}`
     }
 
     chrome.storage.sync.get({baseUrl: '', paramName: 'name'}, (items) => {
-      setXhost(items.baseUrl);
+      setHost(items.baseUrl);
       setParam(items.paramName);
     });
     
     getContactName()
   }, [person])
+  
   return (
-    <Frame containerStyle={{ maxWidth: '425px' }} ref={iframeRef} url={`${xhost}/?${param}=`} />
+    <Frame containerStyle={{ maxWidth: '425px' }} ref={iframeRef} url={`${host}?${param}=`} />
   )
 }
 
